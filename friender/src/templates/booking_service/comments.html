@@ -1,0 +1,20 @@
+{% load static %}
+
+<section id="testimonials" class="testimonials section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Comments</h2>
+    </div>
+    {% for comment in comments %}
+    <div class="swiper-slide">
+        <div class="testimonial-item">
+            <img src="{% static 'img/profile.webp' %}" class="testimonial-img" alt="">
+            <h3>{{comment.name}}</h3>
+            <p>
+                <i class="bi bi-quote quote-icon-left"></i>
+                <span>{{comment.text}}</span>
+                <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</section>

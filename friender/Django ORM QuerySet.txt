@@ -1,0 +1,135 @@
+2)	Ввести 10 разных отелей с разным количеством звёзд и разных городах
+
+In [3]: hotels2 = Hotel.objects.all()[:10]
+
+In [4]: hotels2
+Out[4]: SELECT "booking_service_hotel"."id",
+       "booking_service_hotel"."name",
+       "booking_service_hotel"."stars",
+       "booking_service_hotel"."address",
+       "booking_service_hotel"."city",
+       "booking_service_hotel"."phone",
+       "booking_service_hotel"."created_at",
+       "booking_service_hotel"."updated_at"
+  FROM "booking_service_hotel"
+ LIMIT 10
+
+3)	Ввести 10 разных пользователей разных возрастов
+
+In [5]: persons3 = Person.objects.all()[:10]
+
+In [7]: persons3
+Out[7]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ LIMIT 10
+
+
+4)	Вывести всех пользователей сайта.
+
+In [8]: persons4 = Person.objects.all()
+
+In [9]: persons4
+Out[9]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ LIMIT 21
+
+5)	Вывести все отели, имеющие более 3 звёзд!
+
+In [10]: hotels5 = Hotel.objects.filter(stars__gt=3)
+
+In [11]: hotels5
+Out[11]: SELECT "booking_service_hotel"."id",
+       "booking_service_hotel"."name",
+       "booking_service_hotel"."stars",
+       "booking_service_hotel"."address",
+       "booking_service_hotel"."city",
+       "booking_service_hotel"."phone",
+       "booking_service_hotel"."created_at",
+       "booking_service_hotel"."updated_at"
+  FROM "booking_service_hotel"
+ WHERE "booking_service_hotel"."stars" > 3.0
+ LIMIT 21
+
+6)	Вывести тех пользователей которые старше 40 лет а имя начинается на “P”.
+
+In [12]: persons6 = Person.objects.filter(age__gt=40, first_name__startswith='P')
+
+In [13]: persons6
+Out[13]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ WHERE ("booking_service_person"."age" > 40 AND "booking_service_person"."first_name"::text LIKE 'P%')
+ LIMIT 21
+
+7)	Найти всех пользователей которых зовут “Nick” или “Suzan”
+
+
+In [14]: persons7 = Person.objects.filter(first_name__in=['Nick', 'Suzan'])
+
+In [15]: persons7
+Out[15]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ WHERE "booking_service_person"."first_name" IN ('Nick', 'Suzan')
+ LIMIT 21
+
+8)	Вывести первых 5 самых младших людей на сайте.
+
+
+In [17]: persons8 = Person.objects.order_by('age')[:5]
+
+In [18]: persons8
+Out[18]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ ORDER BY "booking_service_person"."age" ASC
+ LIMIT 5
+
+9)	Вывести всех девушек в возрасте от 18 до 30 лет
+
+In [19]: persons9 = Person.objects.filter(sex='f', age__gte=18, age__lte=30)
+
+In [20]: persons9
+Out[20]: SELECT "booking_service_person"."id",
+       "booking_service_person"."first_name",
+       "booking_service_person"."last_name",
+       "booking_service_person"."age",
+       "booking_service_person"."sex",
+       "booking_service_person"."email",
+       "booking_service_person"."created_at",
+       "booking_service_person"."updated_at"
+  FROM "booking_service_person"
+ WHERE ("booking_service_person"."age" >= 18 AND "booking_service_person"."age" <= 30 AND "booking_service_person"."sex" = 'f')
+ LIMIT 21

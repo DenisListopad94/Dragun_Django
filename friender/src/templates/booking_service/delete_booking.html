@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete | Friender{% endblock %}
+
+{% block content %}
+<section style="margin-top: 50px;">
+    <p>Book ID: {{booking_id}}</p>
+    {% if info %}
+    <p style="color: red;">info: {{info}}</p>
+    {% endif %}
+</section>
+{% endblock %}

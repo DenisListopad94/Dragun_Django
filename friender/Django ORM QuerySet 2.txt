@@ -1,0 +1,92 @@
+-- Вывести всех пользователей старше 30 которые были в отеле  B&B
+In [16]: guests = Guest.objects.filter(bookings__hotel__name='B&B HOTEL', age__gt=30)
+
+In [17]: guests
+Out[17]: SELECT "booking_service_guest"."id",
+       "booking_service_guest"."first_name",
+       "booking_service_guest"."last_name",
+       "booking_service_guest"."age",
+       "booking_service_guest"."sex",
+       "booking_service_guest"."email",
+       "booking_service_guest"."phone",
+       "booking_service_guest"."created_at",
+       "booking_service_guest"."updated_at"
+  FROM "booking_service_guest"
+ INNER JOIN "booking_service_booking"
+    ON ("booking_service_guest"."id" = "booking_service_booking"."guest_id")
+ INNER JOIN "booking_service_hotel"
+    ON ("booking_service_booking"."hotel_id" = "booking_service_hotel"."id")
+ WHERE ("booking_service_guest"."age" > 30 AND "booking_service_hotel"."name" = 'B&B HOTEL')
+ LIMIT 21
+
+
+ -- Вывести все заведения с максимальным рейтингом в 5 звёзд. (Вывести отели с рейтингом выше 4)
+In [28]: hotels_raiting = Hotel.objects.filter(stars__gt=4.5)
+
+In [29]: hotels_raiting
+Out[29]: SELECT "booking_service_hotel"."id",
+       "booking_service_hotel"."name",
+       "booking_service_hotel"."stars",
+       "booking_service_hotel"."address",
+       "booking_service_hotel"."city",
+       "booking_service_hotel"."phone",
+       "booking_service_hotel"."created_at",
+       "booking_service_hotel"."updated_at"
+  FROM "booking_service_hotel"
+ WHERE "booking_service_hotel"."stars" > 4.5
+ LIMIT 21
+
+
+ -- Вывести все комментарии отеля B&B  которые сделали пользователи которые в нём остановились и возраст которых от 20 до 30 лет
+ In [39]: hotel_comments = comments = HotelComment.objects.filter(
+    ...:     hotel__name='B&B HOTEL',
+    ...:     guest__age__gte=20,
+    ...:     guest__age__lte=30
+    ...: )
+
+In [40]: hotel_comments
+Out[40]: SELECT "booking_service_hotelcomment"."id",
+       "booking_service_hotelcomment"."text",
+       "booking_service_hotelcomment"."time",
+       "booking_service_hotelcomment"."hotel_id",
+       "booking_service_hotelcomment"."guest_id"
+  FROM "booking_service_hotelcomment"
+ INNER JOIN "booking_service_guest"
+    ON ("booking_service_hotelcomment"."guest_id" = "booking_service_guest"."id")
+ INNER JOIN "booking_service_hotel"
+    ON ("booking_service_hotelcomment"."hotel_id" = "booking_service_hotel"."id")
+ WHERE ("booking_service_guest"."age" >= 20 AND "booking_service_guest"."age" <= 30 AND "booking_service_hotel"."name" = 'B&B HOTEL')
+ LIMIT 21
+
+
+ --Вывести первых 5 девушек у которых больше 3 хобби (услуги).
+
+ In [45]: girls = Guest.objects.filter(
+    ...:     sex='f',
+    ...:     bookings__hotel_services__isnull=False
+    ...: ).annotate(
+    ...:     num_services=Count('bookings__hotel_services')
+    ...: ).filter(
+    ...:     num_services__gt=3
+    ...: )[:5]
+
+In [46]: girls
+Out[46]: SELECT "booking_service_guest"."id",
+       "booking_service_guest"."first_name",
+       "booking_service_guest"."last_name",
+       "booking_service_guest"."age",
+       "booking_service_guest"."sex",
+       "booking_service_guest"."email",
+       "booking_service_guest"."phone",
+       "booking_service_guest"."created_at",
+       "booking_service_guest"."updated_at",
+       COUNT("booking_service_booking_hotel_services"."hotelservice_id") AS "num_services"
+  FROM "booking_service_guest"
+ INNER JOIN "booking_service_booking"
+    ON ("booking_service_guest"."id" = "booking_service_booking"."guest_id")
+ INNER JOIN "booking_service_booking_hotel_services"
+    ON ("booking_service_booking"."id" = "booking_service_booking_hotel_services"."booking_id")
+ WHERE ("booking_service_booking_hotel_services"."hotelservice_id" IS NOT NULL AND "booking_service_guest"."sex" = 'f')
+ GROUP BY "booking_service_guest"."id"
+HAVING COUNT("booking_service_booking_hotel_services"."hotelservice_id") > 3
+ LIMIT 5

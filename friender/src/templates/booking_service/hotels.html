@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hotels | Friender{% endblock %}
+
+{% block content %}
+
+<section id="team" class="team section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Hotels</h2>
+    </div>
+    <div class="container">
+        <div class="row gy-4">
+            {% for item in hotels %}
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-member d-flex align-items-start">
+                    <div class="pic"><img src="{% static 'img/hotel.jpeg' %}" class="img-fluid" alt=""></div>
+                    <div class="member-info">
+                        <h4>{{item.hotel.name}}</h4>
+                        <span>Rating: {{item.hotel.stars}} </i></span>
+                        <p>Address: {{item.hotel.address}}</p>
+                        <hr/>
+                        <a href="{% url 'Hotel' item.hotel.name %}">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-rounded btn-sm"
+                                data-mdb-ripple-color="dark">See
+                                profile</button>
+                        </a>
+                        <div class="container">
+                            <br>
+                            <h5>Comments</h5>
+                            {% for comment in item.comments %}
+                            <p><b>{{comment.guest.first_name}}</b>: {{comment.text}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

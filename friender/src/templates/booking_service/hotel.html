@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hotel | Friender{% endblock %}
+
+{% block content %}
+<section id="team" class="team section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{hotel.name}}</h2>
+    </div>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-member d-flex align-items-start">
+                    <div class="pic"><img src="{% static 'img/hotel.jpeg' %}" class="img-fluid" alt=""></div>
+                    <div class="member-info">
+                        <h4>{{hotel.name}}</h4>
+                        <span>Rating: {{hotel.stars}} </i></span>
+                        <p>Phone: {{hotel.phone}}</p>
+                        <p>City: {{hotel.city}}</p>
+                        <p>Address: {{hotel.address}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% include "comments.html" %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Book | Friender{% endblock %}
+
+{% block content %}
+<section style="margin-top: 50px;">
+    <p>hotel_name: {{hotel_name}}</p>
+    <p>user_id: {{user_id}}</p>
+    <p>room_number: {{room_number}}</p>
+    {% if info %}
+    <p style="color: red;">info: {{info}}</p>
+    {% endif %}
+</section>
+{% endblock %}
