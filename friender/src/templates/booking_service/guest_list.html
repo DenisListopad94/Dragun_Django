@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Guests | Friender{% endblock %}
+
+{% block content %}
+<section id="team" class="team section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Guests</h2>
+    </div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Sex</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guest in guests %}
+                <tr>
+                    <td>{{ guest.first_name }}</td>
+                    <td>{{ guest.last_name }}</td>
+                    <td>{{ guest.age }}</td>
+                    <td>{{ guest.get_sex_display }}</td>
+                    <td>{{ guest.email }}</td>
+                    <td>{{ guest.phone }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+                {% if is_paginated %}
+                <div>
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                </div>
+        
+                    <div>
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </div>
+                    <div>
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

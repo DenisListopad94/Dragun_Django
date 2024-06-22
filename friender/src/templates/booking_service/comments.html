@@ -1,5 +1,8 @@
 {% load static %}
+{% load cache %}
 
+{% with 'filesystem' as CACHE_BACKEND %}
+{% cache 1200 comments %}
 <section id="testimonials" class="testimonials section">
     <div class="container section-title" data-aos="fade-up">
         <h2>Comments</h2>
@@ -18,3 +21,5 @@
     </div>
     {% endfor %}
 </section>
+{% endcache %}
+{% endwith %}

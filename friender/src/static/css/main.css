@@ -2125,3 +2125,9 @@
   .starter-section {
     /* Add your styles here */
   }
+
+  .add_user_button_container{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 12px;
+  }

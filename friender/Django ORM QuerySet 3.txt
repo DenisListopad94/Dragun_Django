@@ -1,0 +1,67 @@
+5. Вывести всех пользователей старше 30 которые любят спорт!
+
+quests = Guest.objects.filter(age__gt=30, bookings__hotel_services__name='sport').distinct()
+
+In [2]: guests
+Out[2]: SELECT DISTINCT "booking_service_guest"."id",
+       "booking_service_guest"."first_name",
+       "booking_service_guest"."last_name",
+       "booking_service_guest"."age",
+       "booking_service_guest"."sex",
+       "booking_service_guest"."email",
+       "booking_service_guest"."phone",
+       "booking_service_guest"."created_at",
+       "booking_service_guest"."updated_at"
+  FROM "booking_service_guest"
+ INNER JOIN "booking_service_booking"
+    ON ("booking_service_guest"."id" = "booking_service_booking"."guest_id")
+ INNER JOIN "booking_service_booking_hotel_services"
+    ON ("booking_service_booking"."id" = "booking_service_booking_hotel_services"."booking_id")
+ INNER JOIN "booking_service_hotelservice"
+    ON ("booking_service_booking_hotel_services"."hotelservice_id" = "booking_service_hotelservice"."id")
+ WHERE ("booking_service_guest"."age" > 30 AND "booking_service_hotelservice"."name" = 'sport')
+ LIMIT 21
+
+
+ 6. Вывести первых 5 пользователей у которых больше 3 хобби.
+
+ guests = Guest.objects.annotate(num_services=Count('bookings__hotel_services')).filter(num_services__gt=3).order_by('id')[:5]
+
+ Out[4]: SELECT "booking_service_guest"."id",
+       "booking_service_guest"."first_name",
+       "booking_service_guest"."last_name",
+       "booking_service_guest"."age",
+       "booking_service_guest"."sex",
+       "booking_service_guest"."email",
+       "booking_service_guest"."phone",
+       "booking_service_guest"."created_at",
+       "booking_service_guest"."updated_at",
+       COUNT("booking_service_booking_hotel_services"."hotelservice_id") AS "num_services"
+  FROM "booking_service_guest"
+  LEFT OUTER JOIN "booking_service_booking"
+    ON ("booking_service_guest"."id" = "booking_service_booking"."guest_id")
+  LEFT OUTER JOIN "booking_service_booking_hotel_services"
+    ON ("booking_service_booking"."id" = "booking_service_booking_hotel_services"."booking_id")
+ GROUP BY "booking_service_guest"."id"
+HAVING COUNT("booking_service_booking_hotel_services"."hotelservice_id") > 3
+ ORDER BY "booking_service_guest"."id" ASC
+ LIMIT 5
+
+
+ 7. Вывести всех пользователей у которых возраст больше среднего возраста всех пользователей.
+
+average_age = Guest.objects.aggregate(Avg('age'))['age__avg']
+guests = Guest.objects.filter(age__gt=average_age)
+
+Out[7]: SELECT "booking_service_guest"."id",
+       "booking_service_guest"."first_name",
+       "booking_service_guest"."last_name",
+       "booking_service_guest"."age",
+       "booking_service_guest"."sex",
+       "booking_service_guest"."email",
+       "booking_service_guest"."phone",
+       "booking_service_guest"."created_at",
+       "booking_service_guest"."updated_at"
+  FROM "booking_service_guest"
+ WHERE "booking_service_guest"."age" > 48
+ LIMIT 21

@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Booking, BookingService, Guest, Hotel, HotelComment, HotelService, Profile, Room
+from django.utils.safestring import mark_safe
 
+# todo В данном файле конфигурируется UI в админ панели
 
 class AgeFilter(admin.SimpleListFilter):
     title = 'Age'
@@ -34,6 +36,13 @@ StackedInline,
 AdminTabularInline,
 AdminStackedInline
 '''
+
+@admin.display(description='Photo')
+def get_html_photo(objects):
+    if objects.photo:
+        return mark_safe(f'<img src={objects.photo.url} style="max-width: 100px; max-height: 100px;">')
+    else:
+        return 'No Photo'
 
 class HotelCommentInline(admin.TabularInline):
     model = HotelComment
@@ -70,7 +79,7 @@ class GuestAdmin(admin.ModelAdmin):
 
 class HotelAdmin(admin.ModelAdmin):
     inlines = [HotelCommentInline, BookingInline, RoomInline]
-    list_display = ['name', 'stars', 'address', 'city', 'phone']
+    list_display = ['name', 'stars', 'address', 'city', 'phone', get_html_photo]
     fieldsets = (
         ('Personal Information', {
             'fields': ('name', 'stars')
@@ -110,8 +119,25 @@ class HotelCommentAdmin(admin.ModelAdmin):
 #     selected_fields = queryset.values_list('id', flat=True)
 #     print("Selected fields:", list(selected_fields))
 
+
+
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['id', 'guest', get_html_photo, 'id_card', 'serial_number']
+
+    # отображение фото на просмотре конкретного профиля
+    readonly_fields = [get_html_photo]
+    # def photo_display(self, obj):
+    #     if obj.photo:
+    #         return mark_safe(f'<img src="{obj.photo.url}" style="width: 100px; height: 100px;" />')
+    #     else:
+    #         return 'No photo'
+    # photo_display.short_description = 'Photo'
+
+
+
 admin.site.register(Guest, GuestAdmin)
-admin.site.register(Profile)
+admin.site.register(Profile,ProfileAdmin)
 admin.site.register(Hotel, HotelAdmin)
 admin.site.register(Room)
 admin.site.register(HotelComment, HotelCommentAdmin)

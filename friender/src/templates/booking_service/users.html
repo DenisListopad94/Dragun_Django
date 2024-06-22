@@ -7,6 +7,9 @@
     <div class="container section-title" data-aos="fade-up">
         <h2>Users</h2>
     </div>
+    <div class="add_user_button_container">
+        <a href="{% url 'add_guest' %}" class="btn btn-primary">Add user</a>
+    </div>
     <div class="container">
         <div class="row gy-4">
             {% for item in guests %}
