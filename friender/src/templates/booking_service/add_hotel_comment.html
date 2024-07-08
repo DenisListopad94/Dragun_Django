@@ -1,0 +1,13 @@
+{% load crispy_forms_tags %}
+
+<div class="container mt-5">
+    <h2> Add comment</h2>
+    <form method="post" action="{% url 'hotel' hotel_name=hotel.name %}">
+        {% csrf_token %}
+        {{ comment_form|crispy }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
+

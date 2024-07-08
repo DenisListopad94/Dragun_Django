@@ -5,11 +5,13 @@
       </a>
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{% url 'Home' %}" class="">Home</a></li>
-          <li><a href="{% url 'Hotels' %}">Hotels</a></li>
-          <li><a href="{% url 'Users' %}">Users</a></li>
+          <li><a href="{% url 'home' %}" class="">Home</a></li>
+          <li><a href="{% url 'hotels' %}">Hotels</a></li>
+          <li><a href="{% url 'guest_list' %}">Users</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+      <div style="margin-left: 150px;"><a href="{% url 'logout' %}">Logout</a></div>
     </div>
+
   </header>

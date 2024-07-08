@@ -1,17 +1,24 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
+from django.core.validators import FileExtensionValidator
+from .validators import validate_doc_extension
 
-SEX_CHOICES = {
-    "m": "male",
-    "f": "female",
-}
+SEX_CHOICES = [
+    ("m", "male"),
+    ("f", "female"),
+]
+# ROOM_TYPE_CHOICES = {
+#     "s": "single",
+#     "d": "double",
+#     "o": "other"
+# }
 
-ROOM_TYPE_CHOICES = {
-    "s": "single",
-    "d": "double",
-    "o": "other"
-}
+ROOM_TYPE_CHOICES = [
+    ("s", "single"),
+    ("d", "double"),
+    ("o", "other")
+]
 
 
 # Guest
@@ -38,8 +45,8 @@ class Guest(models.Model):
     first_name = models.CharField(max_length=30, null=True)
     last_name = models.CharField(max_length=50)
     age = models.PositiveIntegerField(validators=[
-        MaxValueValidator(120),
-        MinValueValidator(0)
+        MaxValueValidator(90),
+        MinValueValidator(18)
     ])
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     email = models.EmailField(null=True)
@@ -64,11 +71,16 @@ class HotelOwner(Guest):
 
 
 class Profile(models.Model):
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(
+        null=True, blank=True, verbose_name="User photo", upload_to="users_photo/")
     id_card = models.IntegerField(null=True)
     serial_number = models.CharField(null=True, max_length=30)
     guest = models.OneToOneField(
         Guest, on_delete=models.CASCADE, related_name="profile")
+    info = models.FileField(
+        null=True, blank=True, upload_to="profile_info/",
+        validators=[FileExtensionValidator(allowed_extensions=['doc']), validate_doc_extension]
+    )
 
     def __str__(self):
         return f"profile: {self.id_card}"
@@ -84,6 +96,8 @@ class Hotel(models.Model):
     phone = PhoneNumberField(null=False, blank=False, unique=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    photo = models.ImageField(
+        null=True, verbose_name="hotel_photo", upload_to="hotels_photo/", blank=True)
 
     class Meta:
         indexes = [
@@ -156,3 +170,10 @@ class BookingService(models.Model):
 
     def __str__(self):
         return f"Booking id: {self.booking.id} ||| Service: {self.service.name}"
+
+
+class Queue(models.Model):
+    value = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return str(self.value)
